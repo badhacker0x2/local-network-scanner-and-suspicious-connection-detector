@@ -233,21 +233,13 @@ This project is open-source and intended for educational and research purposes.
 
 <h3>Main Author</h3>
 <p>
-<strong>Rahat Sahriar Rafi</strong><br>
+<strong>Md. Munkasir Haque</strong><br>
 Designed and developed the core structure of the project including:
 <ul>
 <li>Local IPv4 detection</li>
 <li>Network range identification</li>
 <li>Active host scanning on the LAN</li>
 <li>Initial network monitoring functionality</li>
-</ul>
-</p>
-
-<h3>Contributor</h3>
-<p>
-<strong>Md. Munkasir Haque</strong><br>
-Extended and improved the project by adding advanced monitoring features:
-<ul>
 <li>Established connection analysis using <code>netstat</code></li>
 <li>Suspicious IP detection</li>
 <li>Domain name resolution from IP addresses</li>
