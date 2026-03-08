@@ -1,8 +1,8 @@
-<h1 align="center">Network Host Discovery and Connection Monitoring Tool</h1>
+<h1 align="center">Network Security Monitoring Toolkit</h1>
 
 <p align="center">
-A Python-based tool that scans the local network for active hosts and analyzes
-established network connections to detect potentially suspicious activity.
+A Python-based network security toolkit designed for monitoring, analyzing,
+and detecting suspicious activity within a local network environment.
 </p>
 
 <hr>
@@ -10,92 +10,136 @@ established network connections to detect potentially suspicious activity.
 <h2>📌 Project Overview</h2>
 
 <p>
-This project is a <b>network monitoring and analysis tool written in Python</b>.
-It automatically detects the current local network, scans for active devices,
-and inspects active network connections on the system.
+This project is an advanced <b>network monitoring and security analysis tool</b>
+built using Python. The toolkit is capable of scanning the local network,
+detecting active hosts, monitoring live network connections, capturing packets,
+and identifying potential security threats such as suspicious connections
+or ARP spoofing attacks.
 </p>
 
 <p>
-The tool helps users understand:
+It combines multiple network security techniques into a single toolkit that can
+assist users in understanding and analyzing network behavior in real time.
 </p>
-
-<ul>
-<li>Which devices are active on their local network</li>
-<li>What external servers their system is communicating with</li>
-<li>Whether connections are using unusual ports</li>
-<li>Which processes are responsible for network connections</li>
-</ul>
 
 <hr>
 
-<h2>⚙️ Features</h2>
+<h2>⚙️ Core Features</h2>
 
 <ul>
 <li>Automatic detection of the local IPv4 address</li>
-<li>Automatic detection of the local subnet</li>
-<li>Local network host discovery using ping scanning</li>
-<li>Established connection monitoring using <code>netstat</code></li>
-<li>Reverse DNS lookup to resolve domain names from IP addresses</li>
-<li>Detection of unusual or uncommon network ports</li>
-<li>Identification of external/public IP connections</li>
-<li>Displays processes associated with network connections (when available)</li>
+<li>Automatic detection of the local network range</li>
+<li>Multithreaded LAN host discovery</li>
+<li>MAC address detection for active devices</li>
+<li>Vendor identification (Apple, Cisco, Samsung, etc.)</li>
+<li>Real-time monitoring of established network connections</li>
+<li>Suspicious port detection</li>
+<li>Reverse DNS lookup (resolve domain names from IP)</li>
+<li>IP geolocation lookup (country and ISP detection)</li>
+<li>Live network connection monitoring</li>
+<li>Real-time packet sniffing</li>
+<li>ARP Spoofing / Man-in-the-Middle attack detection</li>
+<li>Colored terminal output for better visibility</li>
 </ul>
 
 <hr>
 
-<h2>🖥 How the Tool Works</h2>
+<h2>🖥 How the Toolkit Works</h2>
 
 <h3>1. Network Host Discovery</h3>
 
 <p>
-The tool scans the detected subnet (for example <code>192.168.1.0/24</code>)
-and checks which devices respond to ping requests.
+The tool scans the local subnet and identifies active devices by sending
+ICMP ping requests.
 </p>
 
 <pre>
-Scanning network: 192.168.1.0/24
+Scanning network: 192.168.0.0/24
 
-Active Host: 192.168.1.1
-Active Host: 192.168.1.5
-Active Host: 192.168.1.12
+Active Host: 192.168.0.1
+Active Host: 192.168.0.105
+Active Host: 192.168.0.120
 </pre>
+
+<p>
+For each active host, the tool attempts to retrieve:
+</p>
+
+<ul>
+<li>IP address</li>
+<li>MAC address</li>
+<li>Device vendor information</li>
+</ul>
+
+<hr>
 
 <h3>2. Connection Monitoring</h3>
 
 <p>
 The program reads the system’s connection table using <code>netstat</code>
-and analyzes established connections.
+and analyzes active connections to identify potentially suspicious
+external communication.
 </p>
 
-<p>It extracts information such as:</p>
-
-<ul>
-<li>Local IP address and port</li>
-<li>Remote IP address</li>
-<li>Remote port</li>
-<li>Connection state</li>
-<li>Associated process</li>
-</ul>
-
 <pre>
-Local: 192.168.1.5:50432
-Remote: 140.82.114.26:443
-Domain: github.com
-Process: chrome.exe
-Status: Normal
+[OK] 140.82.114.26 (github.com)
+
+[!] Suspicious Port Detected
+IP: 185.23.12.55
+Port: 4444
+Location: Russia | ISP: Example ISP
 </pre>
 
-<h3>3. Suspicious Connection Detection</h3>
+<hr>
+
+<h3>3. Live Network Monitoring</h3>
 
 <p>
-The tool highlights connections that may require further inspection.
+The toolkit can continuously monitor network connections in real time,
+refreshing results periodically and highlighting unusual activity.
 </p>
 
 <pre>
-[!] Suspicious Connection Detected
-Remote IP: 185.23.12.55
-Port: 4444
-Domain: Unknown
+Monitoring connections...
+
+[OK] google.com
+[OK] github.com
+[!] Suspicious connection detected
+</pre>
+
+<hr>
+
+<h3>4. Packet Sniffer</h3>
+
+<p>
+A built-in packet sniffer captures live network packets and displays
+basic packet information such as source IP, destination IP, and protocol.
+</p>
+
+<pre>
+[PACKET DETECTED]
+
+Source IP: 192.168.0.105
+Destination IP: 8.8.8.8
+Protocol: UDP
+</pre>
+
+<hr>
+
+<h3>5. ARP Spoofing Detection</h3>
+
+<p>
+The toolkit monitors ARP packets on the network and detects potential
+Man-in-the-Middle (MITM) attacks by identifying changes in the gateway
+MAC address.
+</p>
+
+<pre>
+⚠ WARNING: Possible ARP Spoofing Detected
+
+Gateway IP: 192.168.0.1
+Real MAC: 00:1A:2B:AA:BB:CC
+Fake MAC: 88:71:E5:22:19:9A
 </pre>
 
 <hr>
@@ -104,7 +148,7 @@ Domain: Unknown
 
 <p>Python 3.x</p>
 
-<p>Standard Python libraries used:</p>
+<p>Required Python libraries:</p>
 
 <ul>
 <li><code>socket</code></li>
@@ -112,49 +156,51 @@ Domain: Unknown
 <li><code>ipaddress</code></li>
 <li><code>platform</code></li>
 <li><code>re</code></li>
+<li><code>requests</code></li>
+<li><code>scapy</code></li>
+<li><code>colorama</code></li>
+<li><code>mac-vendor-lookup</code></li>
 </ul>
-
-<p>No external packages are required.</p>
 
 <hr>
 
-<h2>🚀 How to Run</h2>
+<h2>📥 Installation</h2>
 
-<h3>1. Clone the repository</h3>
-
-<pre>
-git clone https://github.com/yourusername/network-monitor-tool.git
-</pre>
-
-<h3>2. Navigate to the project folder</h3>
+<h3>Clone the repository</h3>
 
 <pre>
-cd network-monitor-tool
+git clone https://github.com/yourusername/network-security-toolkit.git
 </pre>
 
-<h3>3. Run the program</h3>
+<h3>Navigate to the project folder</h3>
 
 <pre>
-python network_monitor.py
+cd network-security-toolkit
 </pre>
+
+<h3>Create a virtual environment</h3>
+
+<pre>
+python3 -m venv venv
+source venv/bin/activate
+</pre>
+
+<h3>Install dependencies</h3>
+
+<pre>
+pip install -r requirements.txt
+</pre>
+
+<hr>
+
+<h2>🚀 Running the Tool</h2>
 
 <p>
-For full functionality (process detection), run the program with administrator
-or root privileges.
+Some features such as packet sniffing require root privileges.
 </p>
 
-<h3>Linux</h3>
-
 <pre>
-sudo python3 network_monitor.py
-</pre>
-
-<h3>Windows</h3>
-
-<p>Run the terminal as <b>Administrator</b> and execute:</p>
-
-<pre>
-python network_monitor.py
+sudo ./venv/bin/python network_toolkit.py
 </pre>
 
 <hr>
@@ -162,12 +208,15 @@ python network_monitor.py
 <h2>📋 Program Menu</h2>
 
 <pre>
-===== Network Monitor Tool =====
+===== Network Security Toolkit =====
 
 1. Scan Active Hosts
-2. Check Established Connections
+2. Check Connections
 3. Full Scan
-4. Exit
+4. Live Monitoring
+5. Packet Sniffer
+6. ARP Spoof Detection
+7. Exit
 </pre>
 
 <hr>
@@ -175,77 +224,65 @@ python network_monitor.py
 <h2>🎯 Example Use Cases</h2>
 
 <ul>
-<li>Learning network monitoring techniques</li>
+<li>Learning network security monitoring techniques</li>
 <li>Identifying devices connected to a local network</li>
-<li>Analyzing outgoing network connections</li>
-<li>Detecting unusual connection behavior</li>
-<li>Educational cybersecurity projects</li>
+<li>Analyzing suspicious outbound connections</li>
+<li>Detecting potential Man-in-the-Middle attacks</li>
+<li>Educational cybersecurity research and practice</li>
 </ul>
 
 <hr>
 
-<h2>⚠ Limitations</h2>
-
-<ul>
-<li>Some devices block ICMP ping and may not appear in host scans.</li>
-<li>Suspicious detection is based on simple heuristics.</li>
-<li>This tool is not a replacement for full intrusion detection systems.</li>
-</ul>
-
-<hr>
-
-<h2>📚 Educational Purpose</h2>
+<h2>⚠ Disclaimer</h2>
 
 <p>
-This project is designed for learning purposes and demonstrates concepts such as:
+This project is intended strictly for <b>educational and research purposes</b>.
+Users should only run the tool on networks they own or have permission to analyze.
+</p>
+
+<hr>
+
+<h2>👨‍💻 Authors & Contributions</h2>
+
+<div style="background-color:#f6f8fa;padding:15px;border-radius:8px;font-family:Arial;">
+
+<h3>Main Author</h3>
+<p>
+
+<h3>Contributor</h3>
+<p>
+<strong>Md. Munkasir Haque</strong><br>
+Developed the initial version of the project including:
 </p>
 
 <ul>
-<li>Network host discovery</li>
-<li>Network connection analysis</li>
-<li>Python networking libraries</li>
-<li>Basic cybersecurity monitoring techniques</li>
+<li>Local IPv4 detection</li>
+<li>Network range identification</li>
+<li>LAN host discovery</li>
+<li>Basic connection monitoring using <code>netstat</code></li>
+<li>Suspicious connection detection logic</li>
+<li>Domain resolution from IP addresses</li>
 </ul>
-
-<hr>
-
-<h2>🔮 Possible Future Improvements</h2>
+<strong>Rahat Sahriar Rafi</strong><br>
+Developed and expanded the project into a full network security toolkit by adding:
+</p>
 
 <ul>
-<li>Multithreaded host scanning</li>
+<li>Multithreaded network scanning</li>
+<li>MAC address and vendor detection</li>
+<li>Live connection monitoring</li>
+<li>Packet sniffing functionality</li>
 <li>IP geolocation lookup</li>
-<li>Integration with IP reputation databases</li>
-<li>Real-time connection monitoring</li>
-<li>Colored terminal alerts</li>
+<li>ARP spoofing / MITM attack detection</li>
+<li>Enhanced CLI interface and monitoring features</li>
 </ul>
+
+</div>
 
 <hr>
 
 <h2>📜 License</h2>
 
 <p>
-This project is open-source and intended for educational and research purposes.
+This project is open-source and available for educational use.
 </p>
-
-<h2>Author & Contribution</h2>
-
-<div style="background-color:#f6f8fa;padding:15px;border-radius:8px;font-family:Arial;">
-
-<h3>Main Author</h3>
-<p>
-<strong>Md. Munkasir Haque</strong><br>
-Designed and developed the core structure of the project including:
-<ul>
-<li>Local IPv4 detection</li>
-<li>Network range identification</li>
-<li>Active host scanning on the LAN</li>
-<li>Initial network monitoring functionality</li>
-<li>Established connection analysis using <code>netstat</code></li>
-<li>Suspicious IP detection</li>
-<li>Domain name resolution from IP addresses</li>
-<li>Unusual port detection</li>
-<li>Connection process identification</li>
-</ul>
-</p>
-
-</div>
